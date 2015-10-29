@@ -26,7 +26,7 @@
 /************************************************************************************
  * Private function / method prototypes
  ************************************************************************************/
-//static void collision();
+static void collision();
 
 /************************************************************************************
  * Constant declarations / table declarations
@@ -86,26 +86,16 @@ void *moveball(void* vp) {
 			//collision();
 		}
 		if (ballx >= maxx - 1) { //right side of the screen
-			//ballAngle = 180 - ballAngle;
-			move(maxy / 2.0f, maxx / 2.0f);
-			addch(' ');
-			move(maxy / 2.0f, maxx / 2.0f);
-			addch('O');
-			touchwin(win);
-			refresh();
+			ballAngle = 180 - ballAngle;
 			score1++;
-			//collision();
+			mvprintw(1, 23, "%i", score1);
+			collision();
 		}
 		if (ballx < 1) { //left side of the screen
-			//ballAngle = 180 - ballAngle;
-			move(maxy / 2.0f, maxx / 2.0f);
-			addch(' ');
-			move(maxy / 2.0f, maxx / 2.0f);
-			addch('O');
-			touchwin(win);
-			refresh();
+			ballAngle = 180 - ballAngle;
 			score2++;
-			//collision();
+			mvprintw(1, 53, "%i", score2);
+			collision();
 		}
 
 		ballAngle = fmod(ballAngle + 360, 360.0f);
@@ -132,6 +122,6 @@ void *moveball(void* vp) {
  * Function return value: None
  ************************************************************************************/
 // collision sound effects
-/*static void collision() {
+static void collision() {
 	return;
-}*/
+}

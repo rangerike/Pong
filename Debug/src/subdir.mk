@@ -6,17 +6,23 @@
 C_SRCS += \
 ../src/ballctrl.c \
 ../src/paddlectrl.c \
-../src/pong.c 
+../src/paddlectrl2.c \
+../src/pong.c \
+../src/timeTracker.c 
 
 OBJS += \
 ./src/ballctrl.o \
 ./src/paddlectrl.o \
-./src/pong.o 
+./src/paddlectrl2.o \
+./src/pong.o \
+./src/timeTracker.o 
 
 C_DEPS += \
 ./src/ballctrl.d \
 ./src/paddlectrl.d \
-./src/pong.d 
+./src/paddlectrl2.d \
+./src/pong.d \
+./src/timeTracker.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

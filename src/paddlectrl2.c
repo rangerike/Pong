@@ -19,6 +19,7 @@
 #include "pong.h"
 #include "ballctrl.h"
 #include <unistd.h>
+
 /************************************************************************************
  * Private structure / type definitions
  ************************************************************************************/
@@ -33,7 +34,7 @@ static void undrawPaddle(int center);
 /************************************************************************************
  * Constant declarations / table declarations
  ***********************************************************************************/
-
+int maxx;
 /************************************************************************************
  * Method header:
  * Function name: drawPaddle
@@ -47,7 +48,7 @@ static void drawPaddle(int center) {
 	int i;
 
 	for (i = center - (PADDLE_SIZE / 2); i <= center + (PADDLE_SIZE / 2); i++) {
-		move(i, 1);
+		move(i, maxx);
 		addch('|');
 	}
 }
@@ -65,7 +66,7 @@ static void undrawPaddle(int center) {
 	int i;
 
 	for (i = center - (PADDLE_SIZE / 2); i <= center + (PADDLE_SIZE / 2); i++) {
-		move(i, 1);
+		move(i, maxx);
 		addch(' ');
 	}
 }
@@ -75,31 +76,32 @@ static void undrawPaddle(int center) {
  * Function name: moveme
  * Function purpose: This function is responsible for moving the users paddle.
  *                   It is spawned as a thread and ewill exit if and when quit is no longer true.
- * Function parameters: 
- *                   void *vp - This is a pointer to the parameters passed into the 
+ * Function parameters:
+ *                   void *vp - This is a pointer to the parameters passed into the
  *                              thread.  At the present time, this parameter is not used.
- * Function return value: void* This is the return value when the thread exits.  
- *                              Currently, it is always NULL, as no data is directly 
+ * Function return value: void* This is the return value when the thread exits.
+ *                              Currently, it is always NULL, as no data is directly
  *                              returned by the thread.
  ************************************************************************************/
 // Run the user's paddle
-void *moveme(void* vp) {
+void *moveme2(void* vp) {
 	int ch;
 
 	// get the extents of the screen
-	int maxx;
-	int maxy;
-	getmaxyx(win, maxy, maxx);
-	int vpos = maxy / 2;
 
+	int maxy;
+
+	getmaxyx(win, maxy, maxx);
+
+	int vpos = maxy / 2;
+	maxx -= 3; //player two is on the opposite side of the board
 	// draw the default paddle
 	drawPaddle(vpos);
 
-	if (comcontrol1 == 1) {
+	if (comcontrol2 == 1) {
 		int basecomdelay = 1000000 / difficulty; //change speed based on difficulty if computer controlled
 		while (!quit) {
 			noecho();
-
 			if (vpos > bally) { // The user has pressed the up arrow.  Move the paddle one pixel upwards if possible.
 				undrawPaddle(vpos);
 				vpos--;
@@ -115,7 +117,6 @@ void *moveme(void* vp) {
 				}
 				drawPaddle(vpos);
 			}
-
 			usleep(basecomdelay);
 		}
 	} else {
@@ -124,7 +125,7 @@ void *moveme(void* vp) {
 			ch = getch();
 			switch (ch) {
 
-			case KEY_UP: // The user has pressed the up arrow.  Move the paddle one pixel upwards if possible.
+			case 'w': // The user has pressed the w key.  Move the paddle one pixel upwards if possible.
 				undrawPaddle(vpos);
 				vpos--;
 				if (vpos < PADDLE_SIZE / 2 + 3) {
@@ -132,8 +133,7 @@ void *moveme(void* vp) {
 				}
 				drawPaddle(vpos);
 				break;
-
-			case KEY_DOWN: // The user has pressed the down arrow.  Move the paddle one pixel downward if possible.
+			case 's': // The user has pressed the s key.  Move the paddle one pixel downward if possible.
 				undrawPaddle(vpos);
 				vpos++;
 				if (vpos > ((maxy - 2) - (PADDLE_SIZE / 2))) {
@@ -141,8 +141,7 @@ void *moveme(void* vp) {
 				}
 				drawPaddle(vpos);
 				break;
-
-			case 'q': // The user has pressed the quit button.  Exit the game.
+			case 'q': // The user has pressed the quiz button.  Exit the game.
 				quit = true;
 				break;
 			default:

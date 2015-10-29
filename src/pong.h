@@ -23,6 +23,7 @@
  ************************************************************************************/
 #include <curses.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 /************************************************************************************
  * Public structure / type definitions
@@ -33,6 +34,14 @@
  * Public / global variable definitions
  ************************************************************************************/
 // Global data - for inter-thread communication
+static volatile int difficulty;
+static volatile int comcontrol1;
+static volatile int comcontrol2;
+static volatile int numplayers;
+static volatile int bally;
+static volatile int ballx;
+static volatile int score1;
+static volatile int score2;
 
 EXTERN_PFX WINDOW *win;	// the curses window
 EXTERN_PFX bool quit;  // a flag to stop all threads
